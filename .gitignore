@@ -1,0 +1,5 @@
+/nuxt
+/api
+/databases
+.env
+.DS_Store

@@ -1,12 +1,12 @@
-version: "3.5"
+version: "3.6"
 
 services:
 
   nginx:
     image: nginx:latest
     ports:
-      - 0.0.0.0:80:80
-      - 0.0.0.0:443:443
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     volumes:
       - ./api:/var/www/api:cached
@@ -27,25 +27,25 @@ services:
     build:
       context: ./php-fpm
     ports:
-    - 9000:9000
+      - "9000:9000"
     volumes:
-    - ./api:/var/www/api
+      - ./api:/var/www/api
 
   nodejs:
     build:
-      context: .
-      dockerfile: ./nodejs/Dockerfile
+      context: ./nuxt/
+      dockerfile: ./nuxt/Dockerfile
     ports:
-      - 3000:3000
+      - "3000:3000"
 
   mardiadb:
     image: mariadb:10.5
     ports:
-      - 127.0.0.1:3306:3306
+      - "127.0.0.1:3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: LowKick322aeno893R
-      MYSQL_DATABASE: bestmaster
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: LowKick322aeno893R
+      MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MARIADB_DATABASE}
+      MYSQL_USER: ${MARIADB_USER}
+      MYSQL_PASSWORD: ${MARIADB_USER_PASSWORD}
     volumes:
-      - ./databases/mariadb:/var/lib/mysql:cached
+      - ./databases/mariadb:/var/lib/mysql
