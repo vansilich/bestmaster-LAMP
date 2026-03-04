@@ -1,9 +1,8 @@
-version: "3.6"
-
 services:
 
   nginx:
     image: nginx:latest
+    restart: unless-stopped
     ports:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
@@ -17,6 +16,7 @@ services:
 
   certbot:
     image: certbot/certbot
+    restart: unless-stopped
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     volumes:
       - ./configs/certbot/conf:/etc/letsencrypt
@@ -25,6 +25,7 @@ services:
   php-fpm:
     build:
       context: ./php-fpm
+    restart: unless-stopped
     ports:
       - "9000:9000"
     volumes:
@@ -34,11 +35,13 @@ services:
     build:
       context: ./nuxt/
       dockerfile: Dockerfile
+    restart: unless-stopped
     ports:
       - "3000:3000"
 
   mardiadb:
     image: mariadb:10.5
+    restart: unless-stopped
     ports:
       - "127.0.0.1:3306:3306"
     environment:
